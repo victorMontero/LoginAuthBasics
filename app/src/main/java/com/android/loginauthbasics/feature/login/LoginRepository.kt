@@ -1,4 +1,4 @@
-package com.android.loginauthbasics
+package com.android.loginauthbasics.feature.login
 
 import kotlinx.coroutines.delay
 import javax.inject.Inject

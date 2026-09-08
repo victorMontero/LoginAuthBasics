@@ -1,4 +1,4 @@
-package com.android.loginauthbasics
+package com.android.loginauthbasics.feature.login
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -42,9 +42,11 @@ class LoginViewModel @Inject constructor(private val repository: LoginRepository
     private val _loginState: MutableStateFlow<LoginUiState> = MutableStateFlow(LoginUiState())
     val loginState: StateFlow<LoginUiState> = _loginState.asStateFlow()
 
-    fun isFormValid(): Boolean {
-        return _loginState.value.loginState.isNotBlank() && _loginState.value.passwordState.isNotBlank()
-    }
+///region forma antiga, derivated state dentro da data class foi a melhoria
+//    fun isFormValid(): Boolean {
+//        return _loginState.value.loginState.isNotBlank() && _loginState.value.passwordState.isNotBlank()
+//    }
+///endregion
 
     fun onLoginChanged(newLogin: String) {
         _loginState.update { it.copy(loginState = newLogin) }
@@ -85,13 +87,16 @@ class LoginViewModel @Inject constructor(private val repository: LoginRepository
         }
     }
 
-
     fun resetSnackBarState() {
         _loginState.update { it.copy(isLoginSuccessful = false) }
     }
 
     fun resetErrorState() {
         _loginState.update { it.copy(errorMessage = "") }
+    }
+
+    fun togglePasswordVisibility() {
+        _loginState.update { it.copy(isPasswordVisible = !it.isPasswordVisible) }
     }
 }
 
@@ -100,5 +105,9 @@ data class LoginUiState(
     val passwordState: String = "",
     val isLoginSuccessful: Boolean = false,
     val isLoading: Boolean = false,
-    val errorMessage: String = ""
-)
+    val errorMessage: String = "",
+    val isPasswordVisible: Boolean = false
+){
+    val isButtonEnabled: Boolean
+        get() = loginState.isNotBlank() && passwordState.isNotBlank()
+}

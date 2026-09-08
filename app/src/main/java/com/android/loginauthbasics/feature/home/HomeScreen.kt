@@ -1,4 +1,4 @@
-package com.android.loginauthbasics
+package com.android.loginauthbasics.feature.home
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize

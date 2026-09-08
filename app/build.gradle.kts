@@ -55,6 +55,7 @@ dependencies {
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.hilt)
     implementation(libs.androidx.hilt.navigation.compose)
+    implementation("androidx.compose.material:material-icons-extended")
     implementation(libs.kotlinx.coroutines.test)
     ksp(libs.hilt.compiler)
     testImplementation(libs.junit)

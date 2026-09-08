@@ -2,12 +2,18 @@ package com.android.loginauthbasics
 
 import android.R.attr.password
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsNotEnabled
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
+import com.android.loginauthbasics.feature.login.LoginContent
 import org.junit.Assert.assertEquals
 import org.junit.Rule
 import org.junit.Test
@@ -28,7 +34,9 @@ class LoginScreenTest {
                 onButtonClick = {},
                 buttonEnabled = true,
                 hostState = SnackbarHostState(),
-                isLoading = true
+                isLoading = true,
+                isPasswordVisible = false,
+                onPasswordVisibilityChange = {}
             )
         }
         composeTestRule.onNodeWithContentDescription("loading").assertIsDisplayed()
@@ -36,19 +44,21 @@ class LoginScreenTest {
 
     @Test
     fun testLoginTextField_emitsCallbackWhenTyped(){
-        var login = ""
-        var password = ""
+        var login by mutableStateOf("")
+        var password by mutableStateOf("")
 
         composeTestRule.setContent {
             LoginContent(
-                login = "",
-                onLoginChange = { login = it} ,
-                password = "",
-                onPasswordChange = {password = it},
+                login = login,
+                onLoginChange = { login = it },
+                password = password,
+                onPasswordChange = { password = it },
                 onButtonClick = {},
                 buttonEnabled = true,
                 hostState = SnackbarHostState(),
-                isLoading = false
+                isLoading = false,
+                isPasswordVisible = true,
+                onPasswordVisibilityChange = {}
             )
         }
 
@@ -66,13 +76,15 @@ class LoginScreenTest {
         composeTestRule.setContent {
             LoginContent(
                 login = "",
-                onLoginChange = {} ,
+                onLoginChange = {},
                 password = "",
                 onPasswordChange = {},
-                onButtonClick = {buttonClicked = true},
+                onButtonClick = { buttonClicked = true },
                 buttonEnabled = true,
                 hostState = SnackbarHostState(),
-                isLoading = false
+                isLoading = false,
+                isPasswordVisible = false,
+                onPasswordVisibilityChange = {}
             )
         }
 
@@ -86,13 +98,15 @@ class LoginScreenTest {
         composeTestRule.setContent {
             LoginContent(
                 login = "",
-                onLoginChange = {} ,
+                onLoginChange = {},
                 password = "",
                 onPasswordChange = {},
                 onButtonClick = {},
                 buttonEnabled = false,
                 hostState = SnackbarHostState(),
-                isLoading = false
+                isLoading = false,
+                isPasswordVisible = false,
+                onPasswordVisibilityChange = {}
             )
         }
 

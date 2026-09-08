@@ -1,8 +1,8 @@
 package com.android.loginauthbasics
 
-import androidx.lifecycle.viewmodel.compose.viewModel
+import com.android.loginauthbasics.feature.login.LoginRepository
+import com.android.loginauthbasics.feature.login.LoginViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
@@ -45,7 +45,7 @@ class LoginViewModelTest {
         viewModel.onLoginChanged(loginState)
         viewModel.onPasswordChanged(passwordState)
 
-        val result = viewModel.isFormValid()
+        val result = viewModel.loginState.value.isButtonEnabled
 
         assertTrue(result)
 
@@ -60,7 +60,7 @@ class LoginViewModelTest {
         viewModel.onLoginChanged(loginState)
         viewModel.onPasswordChanged(passwordState)
 
-        val result = viewModel.isFormValid()
+        val result = viewModel.loginState.value.isButtonEnabled
 
         assertFalse(result)
 
@@ -75,7 +75,7 @@ class LoginViewModelTest {
         viewModel.onLoginChanged(loginState)
         viewModel.onPasswordChanged(passwordState)
 
-        val result = viewModel.isFormValid()
+        val result = viewModel.loginState.value.isButtonEnabled
 
         assertFalse(result)
 
@@ -90,7 +90,7 @@ class LoginViewModelTest {
         viewModel.onLoginChanged(loginState)
         viewModel.onPasswordChanged(passwordState)
 
-        val result = viewModel.isFormValid()
+        val result = viewModel.loginState.value.isButtonEnabled
 
         assertFalse(result)
 
