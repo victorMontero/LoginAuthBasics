@@ -1,6 +1,5 @@
 package com.android.loginauthbasics.feature.login
 
-import android.R.attr.label
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -40,14 +39,14 @@ fun LoginScreen(
 ) {
     val snackBarHostState = remember { SnackbarHostState() }
 
-    val uiState by viewModel.loginState.collectAsStateWithLifecycle()
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     LaunchedEffect(uiState.isLoginSuccessful) {
         if (uiState.isLoginSuccessful) {
 //            snackBarHostState.showSnackbar("login realizado com suicesso")
             viewModel.resetSnackBarState()
 
-            onNavigateToHome(uiState.loginState)
+            onNavigateToHome(uiState.username)
         }
     }
 
@@ -59,9 +58,9 @@ fun LoginScreen(
     }
 
     LoginContent(
-        login = uiState.loginState,
+        login = uiState.username,
         onLoginChange = { viewModel.onLoginChanged(it) },
-        password = uiState.passwordState,
+        password = uiState.password,
         onPasswordChange = { viewModel.onPasswordChanged(it) },
         onButtonClick = { viewModel.login() },
         buttonEnabled = uiState.isButtonEnabled,

@@ -39,8 +39,8 @@ class LoginViewModel @Inject constructor(private val repository: LoginRepository
 //    var errorMessage by mutableStateOf("")
 //        private set
 ///endregion
-    private val _loginState: MutableStateFlow<LoginUiState> = MutableStateFlow(LoginUiState())
-    val loginState: StateFlow<LoginUiState> = _loginState.asStateFlow()
+    private val _uiState: MutableStateFlow<LoginUiState> = MutableStateFlow(LoginUiState())
+    val uiState: StateFlow<LoginUiState> = _uiState.asStateFlow()
 
 ///region forma antiga, derivated state dentro da data class foi a melhoria
 //    fun isFormValid(): Boolean {
@@ -49,15 +49,15 @@ class LoginViewModel @Inject constructor(private val repository: LoginRepository
 ///endregion
 
     fun onLoginChanged(newLogin: String) {
-        _loginState.update { it.copy(loginState = newLogin) }
+        _uiState.update { it.copy(username = newLogin) }
     }
 
     fun onPasswordChanged(newPassword: String) {
-        _loginState.update { it.copy(passwordState = newPassword) }
+        _uiState.update { it.copy(password = newPassword) }
     }
 
     fun login() {
-        _loginState.update {
+        _uiState.update {
             it.copy(
                 isLoading = true,
                 errorMessage = ""
@@ -66,17 +66,17 @@ class LoginViewModel @Inject constructor(private val repository: LoginRepository
 
         viewModelScope.launch {
             val isSuccessful =
-                repository.login(_loginState.value.loginState, _loginState.value.passwordState)
+                repository.login(_uiState.value.username, _uiState.value.password)
 
             if (isSuccessful) {
-                _loginState.update {
+                _uiState.update {
                     it.copy(
                         isLoginSuccessful = true,
                         isLoading = false
                     )
                 }
             } else {
-                _loginState.update {
+                _uiState.update {
                     it.copy(
                         isLoginSuccessful = false,
                         isLoading = false,
@@ -88,26 +88,28 @@ class LoginViewModel @Inject constructor(private val repository: LoginRepository
     }
 
     fun resetSnackBarState() {
-        _loginState.update { it.copy(isLoginSuccessful = false) }
+        _uiState.update { it.copy(isLoginSuccessful = false) }
     }
 
     fun resetErrorState() {
-        _loginState.update { it.copy(errorMessage = "") }
+        _uiState.update { it.copy(errorMessage = "") }
     }
 
     fun togglePasswordVisibility() {
-        _loginState.update { it.copy(isPasswordVisible = !it.isPasswordVisible) }
+        _uiState.update { it.copy(isPasswordVisible = !it.isPasswordVisible) }
     }
 }
 
+///region single source of truth
 data class LoginUiState(
-    val loginState: String = "",
-    val passwordState: String = "",
+    val username: String = "",
+    val password: String = "",
     val isLoginSuccessful: Boolean = false,
     val isLoading: Boolean = false,
     val errorMessage: String = "",
     val isPasswordVisible: Boolean = false
 ){
     val isButtonEnabled: Boolean
-        get() = loginState.isNotBlank() && passwordState.isNotBlank()
+        get() = username.isNotBlank() && password.isNotBlank() && !isLoading && !isLoginSuccessful
 }
+///endregion
