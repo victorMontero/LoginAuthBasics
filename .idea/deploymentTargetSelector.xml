@@ -10,10 +10,6 @@
         <option name="selectionMode" value="DROPDOWN" />
         <DialogSelection />
       </SelectionState>
-      <SelectionState runConfigName="testLoginButton_doNotTriggerCallbackWheButtonEnabledIsTrue()">
-        <option name="selectionMode" value="DROPDOWN" />
-        <DialogSelection />
-      </SelectionState>
       <SelectionState runConfigName="testLoginButton_disabledWhenButtonNodeIsNotEnabled()">
         <option name="selectionMode" value="DROPDOWN" />
         <DialogSelection />

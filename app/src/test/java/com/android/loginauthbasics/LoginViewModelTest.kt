@@ -1,7 +1,7 @@
 package com.android.loginauthbasics
 
-import com.android.loginauthbasics.feature.login.LoginRepository
-import com.android.loginauthbasics.feature.login.LoginViewModel
+import com.android.loginauthbasics.feature.login.data.LoginRepository
+import com.android.loginauthbasics.feature.login.ui.LoginViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.resetMain
@@ -45,7 +45,7 @@ class LoginViewModelTest {
         viewModel.onLoginChanged(loginState)
         viewModel.onPasswordChanged(passwordState)
 
-        val result = viewModel.loginState.value.isButtonEnabled
+        val result = viewModel.uiState.value.isButtonEnabled
 
         assertTrue(result)
 
@@ -60,7 +60,7 @@ class LoginViewModelTest {
         viewModel.onLoginChanged(loginState)
         viewModel.onPasswordChanged(passwordState)
 
-        val result = viewModel.loginState.value.isButtonEnabled
+        val result = viewModel.uiState.value.isButtonEnabled
 
         assertFalse(result)
 
@@ -75,7 +75,7 @@ class LoginViewModelTest {
         viewModel.onLoginChanged(loginState)
         viewModel.onPasswordChanged(passwordState)
 
-        val result = viewModel.loginState.value.isButtonEnabled
+        val result = viewModel.uiState.value.isButtonEnabled
 
         assertFalse(result)
 
@@ -90,7 +90,7 @@ class LoginViewModelTest {
         viewModel.onLoginChanged(loginState)
         viewModel.onPasswordChanged(passwordState)
 
-        val result = viewModel.loginState.value.isButtonEnabled
+        val result = viewModel.uiState.value.isButtonEnabled
 
         assertFalse(result)
 
@@ -110,7 +110,7 @@ class LoginViewModelTest {
 
         testDispatcher.scheduler.advanceUntilIdle()
 
-        assertTrue(viewModel.loginState.value.isLoginSuccessful)
+        assertTrue(viewModel.uiState.value.isLoginSuccessful)
 
     }
 
@@ -128,8 +128,8 @@ class LoginViewModelTest {
 
         testDispatcher.scheduler.advanceUntilIdle()
 
-        assertFalse(viewModel.loginState.value.isLoginSuccessful)
-        assertEquals("Login failed", viewModel.loginState.value.errorMessage)
+        assertFalse(viewModel.uiState.value.isLoginSuccessful)
+        assertEquals("Login failed", viewModel.uiState.value.errorMessage)
 
     }
 
@@ -147,8 +147,8 @@ class LoginViewModelTest {
 
         testDispatcher.scheduler.advanceUntilIdle()
 
-        assertFalse(viewModel.loginState.value.isLoginSuccessful)
-        assertEquals("Login failed", viewModel.loginState.value.errorMessage)
+        assertFalse(viewModel.uiState.value.isLoginSuccessful)
+        assertEquals("Login failed", viewModel.uiState.value.errorMessage)
 
     }
 
@@ -160,7 +160,7 @@ class LoginViewModelTest {
 
         testDispatcher.scheduler.advanceUntilIdle()
 
-        assertFalse(viewModel.loginState.value.isLoginSuccessful)
-        assertEquals("Login failed", viewModel.loginState.value.errorMessage)
+        assertFalse(viewModel.uiState.value.isLoginSuccessful)
+        assertEquals("Login failed", viewModel.uiState.value.errorMessage)
     }
 }

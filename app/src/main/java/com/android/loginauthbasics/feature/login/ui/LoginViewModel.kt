@@ -1,14 +1,19 @@
-package com.android.loginauthbasics.feature.login
+package com.android.loginauthbasics.feature.login.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.android.loginauthbasics.feature.login.data.ErrorResponse
+import com.android.loginauthbasics.feature.login.data.LoginRepository
+import com.android.loginauthbasics.feature.login.data.LoginResponse
 import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.serialization.json.Json
+import retrofit2.HttpException
+import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(private val repository: LoginRepository) : ViewModel() {
@@ -65,22 +70,39 @@ class LoginViewModel @Inject constructor(private val repository: LoginRepository
         }
 
         viewModelScope.launch {
-            val isSuccessful =
-                repository.login(_uiState.value.username, _uiState.value.password)
 
-            if (isSuccessful) {
-                _uiState.update {
-                    it.copy(
-                        isLoginSuccessful = true,
-                        isLoading = false
-                    )
+            try {
+                val response =
+                    repository.login(_uiState.value.username, _uiState.value.password)
+
+                if (response.token.isNotBlank()) {
+                    _uiState.update {
+                        it.copy(
+                            isLoginSuccessful = true,
+                            isLoading = false
+                        )
+                    }
                 }
-            } else {
+            } catch (e: Exception) {
                 _uiState.update {
                     it.copy(
                         isLoginSuccessful = false,
                         isLoading = false,
-                        errorMessage = "Login failed"
+                        errorMessage = if (e is HttpException) {
+                            val errorText = e.response()?.errorBody()?.string()
+                            if (errorText != null){
+                                try {
+                                    val errorFormatted = Json.decodeFromString<ErrorResponse>(errorText)
+                                    errorFormatted.error
+                                } catch (_: Exception) {
+                                    errorText
+                                }
+                            } else {
+                                e.message ?: "Ocorreu um erro inesperado"
+                            }
+                        } else {
+                            e.message  ?: "Ocorreu um erro inesperado"
+                        }
                     )
                 }
             }
@@ -108,8 +130,9 @@ data class LoginUiState(
     val isLoading: Boolean = false,
     val errorMessage: String = "",
     val isPasswordVisible: Boolean = false
-){
+) {
     val isButtonEnabled: Boolean
         get() = username.isNotBlank() && password.isNotBlank() && !isLoading && !isLoginSuccessful
 }
+
 ///endregion

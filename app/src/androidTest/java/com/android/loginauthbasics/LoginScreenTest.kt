@@ -1,11 +1,8 @@
 package com.android.loginauthbasics
 
-import android.R.attr.password
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsNotEnabled
@@ -13,7 +10,7 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
-import com.android.loginauthbasics.feature.login.LoginContent
+import com.android.loginauthbasics.feature.login.ui.LoginContent
 import org.junit.Assert.assertEquals
 import org.junit.Rule
 import org.junit.Test

@@ -1,4 +1,4 @@
-package com.android.loginauthbasics.feature.login
+package com.android.loginauthbasics.feature.login.ui
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
